@@ -1,0 +1,46 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "type": "process",
+            "command": "ninja",
+            "args": [
+                "-C",
+                "build/Debug"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always"
+            }
+        },
+        {
+            "label": "clean",
+            "type": "process",
+            "command": "ninja",
+            "args": [
+                "-C",
+                "build/Debug",
+                "clean"
+            ],
+            "presentation": {
+                "reveal": "silent"
+            }
+        },
+        {
+            "label": "flash firmware",
+            "type": "shell",
+            "command": "openocd",
+            "args": [
+                "openocd -f ${workspaceFolder}/openocd.cfg -c \"program target/thumbv7em-none-eabihf/debug/rust-embedded-demo preverify verify reset exit\""
+            ],
+            "dependsOn":["build"],
+            "presentation": {
+                "reveal": "silent"
+            }
+        },
+    ]
+}
