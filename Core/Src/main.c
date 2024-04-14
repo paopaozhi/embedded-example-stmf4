@@ -22,7 +22,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "cmsis_os2.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -45,8 +45,20 @@
 osThreadId_t defaultTaskHandle;
 const osThreadAttr_t defaultTask_attributes = {
   .name = "defaultTask",
-  .stack_size = 128 * 4,
+  .stack_size = 256 * 4,
   .priority = (osPriority_t) osPriorityNormal,
+};
+/* Definitions for led */
+osThreadId_t ledHandle;
+const osThreadAttr_t led_attributes = {
+  .name = "led",
+  .stack_size = 256 * 4,
+  .priority = (osPriority_t) osPriorityLow1,
+};
+/* Definitions for ledQueue */
+osMessageQueueId_t ledQueueHandle;
+const osMessageQueueAttr_t ledQueue_attributes = {
+  .name = "ledQueue"
 };
 /* USER CODE BEGIN PV */
 
@@ -56,6 +68,7 @@ const osThreadAttr_t defaultTask_attributes = {
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 void StartDefaultTask(void *argument);
+void ledStartTask(void *argument);
 
 /* USER CODE BEGIN PFP */
 void hardware_init(void);
@@ -115,6 +128,10 @@ int main(void)
   /* start timers, add new ones, ... */
   /* USER CODE END RTOS_TIMERS */
 
+  /* Create the queue(s) */
+  /* creation of ledQueue */
+  ledQueueHandle = osMessageQueueNew (8, sizeof(uint32_t), &ledQueue_attributes);
+
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */
   /* USER CODE END RTOS_QUEUES */
@@ -122,6 +139,9 @@ int main(void)
   /* Create the thread(s) */
   /* creation of defaultTask */
   defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
+
+  /* creation of led */
+  ledHandle = osThreadNew(ledStartTask, NULL, &led_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -248,6 +268,24 @@ void StartDefaultTask(void *argument)
     osDelay(1);
   }
   /* USER CODE END 5 */
+}
+
+/* USER CODE BEGIN Header_ledStartTask */
+/**
+* @brief Function implementing the led thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_ledStartTask */
+__weak void ledStartTask(void *argument)
+{
+  /* USER CODE BEGIN ledStartTask */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END ledStartTask */
 }
 
 /**
