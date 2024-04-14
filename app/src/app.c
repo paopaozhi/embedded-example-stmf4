@@ -1,9 +1,10 @@
 #include "app.h"
 #include "FreeRTOS.h"
-#include "ulog.h"
+
+extern osMessageQueueId_t ledQueueHandle;
 
 void hardware_init(void){
-
+    
 }
 
 void my_console_logger(ulog_level_t level, char *msg) {
@@ -16,7 +17,10 @@ int app(void){
     ULOG_INIT();
     ULOG_SUBSCRIBE(my_console_logger, ULOG_DEBUG_LEVEL);
 
-    ULOG_INFO("Arg is start!");
+    ULOG_INFO("ulog is start!");
+
+    LedState led_state = led_blink;
+    osMessageQueuePut(ledQueueHandle,&led_state,0,0);
     return 0;
 }
 

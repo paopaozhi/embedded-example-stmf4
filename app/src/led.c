@@ -3,6 +3,7 @@
 
 // LED
 extern osMessageQueueId_t ledQueueHandle;
+extern osTimerId_t ledTimerHandle;
 
 void ledTask(void *arg) {
   osStatus_t ret;
@@ -13,6 +14,7 @@ void ledTask(void *arg) {
       switch (led_state) {
         case led_blink:
           ULOG_DEBUG("led blink!");
+          osTimerStart(ledTimerHandle,500);
           break;
         case led_open:
           ULOG_DEBUG("led open!");
@@ -29,3 +31,5 @@ void ledTask(void *arg) {
     }
   }
 }
+
+void LedCallback(void *argument) { HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin); }

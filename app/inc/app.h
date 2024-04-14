@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include "main.h"
 #include "cmsis_os2.h"
+#include "ulog.h"
 
 typedef enum {
     led_blink = 0,
@@ -16,5 +17,7 @@ typedef enum {
 // #else
 // #define debug(format,...)
 // #endif
+
+void my_console_logger(ulog_level_t level, char *msg);
  
 #endif

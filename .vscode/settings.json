@@ -6,5 +6,6 @@
         "cmsis_os.h": "c",
         "cmsis_os2.h": "c",
         "ulog.h": "c"
-    }
+    },
+    "cortex-debug.variableUseNaturalFormat": true
 }
